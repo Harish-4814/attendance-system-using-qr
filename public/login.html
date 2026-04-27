@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Login</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial;
+      margin-top: 100px;
+      background: linear-gradient(135deg, #74ebd5, #9face6);
+    }
+
+    .box {
+      background: white;
+      padding: 30px;
+      display: inline-block;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 220px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    #msg {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>🔐 Admin Login</h2>
+
+  <input id="user" placeholder="Username"><br>
+  <input id="pass" type="password" placeholder="Password"><br>
+
+  <button onclick="login()">Login</button>
+
+  <p id="msg"></p>
+</div>
+
+<script>
+function login() {
+  const u = document.getElementById("user").value;
+  const p = document.getElementById("pass").value;
+
+  if (u === "admin" && p === "123") {
+    localStorage.setItem("auth", "true");
+    window.location.href = "/dashboard.html";
+  } else {
+    document.getElementById("msg").innerText = "❌ Invalid Credentials";
+  }
+}
+</script>
+
+</body>
+</html>

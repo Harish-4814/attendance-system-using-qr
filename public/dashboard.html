@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    table {
+      width: 90%;
+      margin: auto;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background: #4CAF50;
+      color: white;
+    }
+
+    tr:hover {
+      background: #f1f1f1;
+    }
+
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      background: red;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: darkred;
+    }
+  </style>
+
+  <!-- 🔒 PROTECTION -->
+  <script>
+    if (localStorage.getItem("auth") !== "true") {
+      window.location.href = "/login.html";
+    }
+  </script>
+
+</head>
+
+<body>
+
+<h2>📊 Attendance Dashboard</h2>
+
+<button onclick="logout()">Logout</button>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Roll No</th>
+      <th>Total Classes</th>
+      <th>Attended</th>
+      <th>Percentage</th>
+    </tr>
+  </thead>
+
+  <tbody id="tableBody"></tbody>
+</table>
+
+<script>
+async function loadData() {
+  const res = await fetch("/attendance");
+  const data = await res.json();
+
+  const table = document.getElementById("tableBody");
+  table.innerHTML = "";
+
+  data.forEach(s => {
+    const percent = s.totalClasses === 0 
+      ? 0 
+      : ((s.attended / s.totalClasses) * 100).toFixed(1);
+
+    table.innerHTML += `
+      <tr>
+        <td>${s.name}</td>
+        <td>${s.rollNo}</td>
+        <td>${s.totalClasses}</td>
+        <td>${s.attended}</td>
+        <td>${percent}%</td>
+      </tr>
+    `;
+  });
+}
+
+function logout() {
+  localStorage.removeItem("auth");
+  window.location.href = "/login.html";
+}
+
+loadData();
+</script>
+
+</body>
+</html>

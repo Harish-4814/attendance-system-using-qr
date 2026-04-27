@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>QR Attendance</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      text-align: center;
+    }
+
+    .container {
+      margin-top: 80px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      opacity: 0.8;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      background: #00c6ff;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0072ff;
+      transform: scale(1.05);
+    }
+
+    .qr-box {
+      margin-top: 40px;
+      display: inline-block;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    #qr {
+      width: 250px;
+    }
+
+    #timer {
+      margin-top: 15px;
+      font-size: 18px;
+      color: yellow;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      font-size: 14px;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>📷 QR Attendance System</h1>
+  <p>Scan QR to mark your attendance</p>
+
+  <button onclick="generateQR()">Generate QR</button>
+
+  <div id="qrContainer"></div>
+  <div id="timer"></div>
+</div>
+
+<div class="footer">
+  Developed for Attendance Management System
+</div>
+
+<script>
+let countdown;
+
+async function generateQR() {
+  const res = await fetch("/generate-qr");
+  const data = await res.json();
+
+  document.getElementById("qrContainer").innerHTML = `
+    <div class="qr-box">
+      <img id="qr" src="${data.qr}">
+    </div>
+  `;
+
+  startTimer(60);
+}
+
+function startTimer(seconds) {
+  clearInterval(countdown);
+
+  let time = seconds;
+  const timer = document.getElementById("timer");
+
+  countdown = setInterval(() => {
+    timer.innerText = "⏳ QR expires in: " + time + " sec";
+    time--;
+
+    if (time < 0) {
+      clearInterval(countdown);
+      timer.innerText = "❌ QR Expired";
+    }
+  }, 1000);
+}
+</script>
+
+</body>
+</html>

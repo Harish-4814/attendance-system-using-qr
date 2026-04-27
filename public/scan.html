@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scan</title>
+</head>
+
+<body style="text-align:center;">
+
+<h2>Enter Roll Number</h2>
+
+<input id="roll" placeholder="Roll No">
+<br><br>
+
+<button onclick="mark()">Submit</button>
+
+<p id="msg"></p>
+
+<script>
+async function mark() {
+  const rollNo = document.getElementById("roll").value;
+
+  const res = await fetch("/mark-attendance", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ rollNo })
+  });
+
+  const text = await res.text();
+  document.getElementById("msg").innerText = text;
+}
+</script>
+
+</body>
+</html>
